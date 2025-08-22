@@ -52,7 +52,10 @@ public class Main {
     static List<Node> findPath(Node start, Node goal) {
         PriorityQueue<Node> openSet = new PriorityQueue<>();
         Set<Node> closedSet = new HashSet<>();
-
+        
+        start.gCost = 0;
+        start.hCost = Math.abs(start.x - goal.x) + Math.abs(start.y - goal.y);
+        openSet.add(start);
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
 
@@ -69,7 +72,7 @@ public class Main {
             closedSet.add(current);
             for (int[] dir : new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}) {
                 int nx = current.x + dir[0], ny = current.y + dir[1];
-                if (nx >= 0 && nx < ROWS && ny < COLS && grid[nx][ny] == 0) {
+                if (nx >= 0 && nx < ROWS && ny < COLS && ny >= 0 && grid[nx][ny] == 0) {
                     Node neigbor = new Node(nx, ny);
                     if (closedSet.contains(neigbor)) {
                         continue;
@@ -95,6 +98,18 @@ public class Main {
         }
         return null;
     }
+    
+    
+    public static void grid(){
+        System.out.println("GRID:");
+        for(int i = 0; i < ROWS; i++){
+            for(int j = 0; j < COLS; j++){
+                System.out.print(grid[i][j] +  " ");
+            }
+            System.out.println("");
+        }
+    }
+    
 
     public static void main(String[] args) {
 
@@ -102,6 +117,7 @@ public class Main {
         Node goal = new Node(4, 4);
         List<Node> path = findPath(start, goal);
 
+        grid();
         if (path != null) {
             System.out.println("Path found:");
             for (Node n : path) {
